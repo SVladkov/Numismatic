@@ -3,10 +3,10 @@ class Coin():
 		self.nominal_value = nominal_value
 		
 	@property 
-	def Nominal(self):
+	def nominal(self):
 		return self.nominal_value
 		
-	@Nominal.setter
-	def Nominal(self, value):
+	@nominal.setter
+	def nominal(self, value):
 		if value > 0:
 			self.nominal_value = value
