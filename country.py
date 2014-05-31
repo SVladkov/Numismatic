@@ -15,8 +15,8 @@ class Countries():
 		self.list_of_countries.append(country)
 	
 	def __str__(self):
-		result = "Countries Currency:"
+		result = ""
 		for c in self.list_of_countries:
-			result += "\n" + c.name + " " + c.currency
+			result += c.name + " " + c.currency + "\n"
 		return result
 	
