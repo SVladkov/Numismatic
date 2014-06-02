@@ -20,3 +20,4 @@ class Countries():
 			result += c.name + " " + c.currency + "\n"
 		return result
 	
+test_country = Country("Bulgaria", "Levas")
