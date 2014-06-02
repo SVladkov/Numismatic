@@ -10,13 +10,17 @@ class SQLiteDatabase(idatabase.IDatabase):
 		self.cursor.execute("CREATE TABLE coin_table(nominal INTEGER, year INTEGER)")
 	
 	def enter_coin(self, coin):
-		self.cursor.execute("INSERT INTO stuffToPlot (nominal, year) VALUES(?, ?)", 
+		self.cursor.execute("INSERT INTO coin_table (nominal, year) VALUES(?, ?)", 
 						(coin.nominal, coin._year))
 		self.connection.commit()
 
 	def get_by_year(self, year):
 		sql = "SELECT * FROM coin_table WHERE year = ?"
 		coins = []
-		for row in cursor.execute(sql, [(year)]):
-			coins.append(row + "\n")
+		for row in self.cursor.execute(sql, [(year)]):
+			coins.append(row) 
 		return coins	
+	
+test_database = SQLiteDatabase()
+
+print(test_database.get_by_year(1976))
