@@ -6,25 +6,17 @@ class SQLiteDatabase(idatabase.IDatabase):
 		self.connection = sqlite3.connect('sqlite_coin_database.db')
 		self.cursor = self.connection.cursor()
 
-	def tableCreate(self):
-		self.cursor.execute("CREATE TABLE stuffToPlot(nominal INTEGER, year INTEGER)")
+	def table_create(self):
+		self.cursor.execute("CREATE TABLE coin_table(nominal INTEGER, year INTEGER)")
 	
 	def enter_coin(self, coin):
 		self.cursor.execute("INSERT INTO stuffToPlot (nominal, year) VALUES(?, ?)", 
 						(coin.nominal, coin._year))
 		self.connection.commit()
-		
-	'''sql = "SELECT * FROM stuffToPlot WHERE age =?"
-	wordUsed = 24 
-		
-		
-	def readData(self):	
-		for row in cursor.execute(sql, [(wordUsed)]):
-			print(row)
-	'''
-#SQLiteDatabase.tableCreate()
-	#dataEntry()
-	#readData()
 
-
-	
+	def get_by_year(self, year):
+		sql = "SELECT * FROM coin_table WHERE year = ?"
+		coins = []
+		for row in cursor.execute(sql, [(year)]):
+			coins.append(row + "\n")
+		return coins	

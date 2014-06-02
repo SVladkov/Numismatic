@@ -6,10 +6,10 @@ import coin
 
 class DatabaseTest(unittest.TestCase):	
 	def test_database_connection(self):
-		test_database = sqlite_database.SQLiteDatabase()
-		test_coin = coin.Coin(5, country.test_country, 1976)
-		test_database.enter_coin(test_coin)
+		#test_database = sqlite_database.SQLiteDatabase()
 		
-		
+		#test_database.enter_coin(test_coin)
+		pass
+	
 if __name__ == '__main__':
     unittest.main()
