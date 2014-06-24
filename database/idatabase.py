@@ -1,4 +1,4 @@
-import coin
+#import coin
 
 class IDatabase:
 	def enter_coin(coin):
