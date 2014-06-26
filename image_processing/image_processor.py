@@ -98,30 +98,115 @@ class ImageProcessor():
 					
 			column += 1
 			
-	def find_column_difference(self, column, compare):
-		j = 0
+	def find_upper_border(self):
+		row = 1
+		column = 0
+		
+		pixel_row_difference = []
+		number_of_consecutive = 0
+		in_sequence = False
+		sequence_start = 0
+		has_big_difference = False
+		
+		while row < self.height:
+			pixel_row_difference = self.find_row_difference(row, -1)
+			for k in range(len(pixel_row_difference)):
+				if pixel_row_difference[k] > 50:
+					has_big_difference = True
+					break
+				else:
+					has_big_difference = False
+					
+			if has_big_difference:
+				if in_sequence:
+					number_of_consecutive += 1
+					if number_of_consecutive > 50:
+						return sequence_start
+				else:
+					in_sequence = True	
+					sequence_start = row
+			else:
+				in_sequence = False
+				number_of_consecutive = 0
+				
+			row += 1
+		
+	def find_lower_border(self):
+		row = self.height - 2
+		column = 0
+		
+		pixel_row_difference = []
+		number_of_consecutive = 0
+		in_sequence = False
+		sequence_start = 0
+		has_big_difference = False
+		
+		while row > 0:
+			pixel_row_difference = self.find_row_difference(row, 1)
+			for k in range(len(pixel_row_difference)):
+				if pixel_row_difference[k] > 40:
+					has_big_difference = True
+					break
+				else:
+					has_big_difference = False
+					
+			if has_big_difference:
+				if in_sequence:
+					number_of_consecutive += 1
+					if number_of_consecutive > 50:
+						return sequence_start
+				else:
+					in_sequence = True	
+					sequence_start = row
+			else:
+				in_sequence = False
+				number_of_consecutive = 0
+				
+			row -= 1
+		
+	def find_row_difference(self, row, row_compare):
+		counter = 0
+		pixel_row_difference = []
+		
+		while counter < self.width:
+			red_difference = self.pixels[counter, row][0] - self.pixels[counter, row + row_compare][0]
+			green_difference = self.pixels[counter, row][1] - self.pixels[counter, row + row_compare][1]
+			blue_difference = self.pixels[counter, row][2] - self.pixels[counter, row + row_compare][2]
+			
+			red_difference = abs(red_difference)
+			green_difference = abs(green_difference)
+			blue_difference = abs(blue_difference)
+			
+			pixel_row_difference.append(red_difference + green_difference + blue_difference)
+			counter += 2	
+			
+		return pixel_row_difference
+			
+	def find_column_difference(self, column, column_compare):
+		counter = 0
 		pixel_column_difference = []
 		
-		while j < self.height:
-			red_difference = self.pixels[column, j][0] - self.pixels[column + compare, j][0]
-			green_difference = self.pixels[column, j][1] - self.pixels[column + compare, j][1]
-			blue_difference = self.pixels[column, j][2] - self.pixels[column + compare, j][2]
+		while counter < self.height:
+			red_difference = self.pixels[column, counter][0] - self.pixels[column + column_compare, counter][0]
+			green_difference = self.pixels[column, counter][1] - self.pixels[column + column_compare, counter][1]
+			blue_difference = self.pixels[column, counter][2] - self.pixels[column + column_compare, counter][2]
 			
 			red_difference = abs(red_difference)
 			green_difference = abs(green_difference)
 			blue_difference = abs(blue_difference)
 			
 			pixel_column_difference.append(red_difference + green_difference + blue_difference)
-			j += 2	
+			counter += 2	
 			
 		return pixel_column_difference
 			
 	def crop(self):
 		left = self.find_left_border()
 		right = self.find_right_border()
-		coin_width = right - left
+		upper = self.find_upper_border()
+		lower = self.find_lower_border()
 		
-		box = (left, 0, left + coin_width, self.height)
+		box = (left, upper, right, lower)
 		region = self.image.crop(box)
 			
 		return region	

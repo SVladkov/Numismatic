@@ -4,3 +4,4 @@ test_image = ImageProcessor("images/test_image.jpg")
 
 region = test_image.crop()
 region.show()
+print(test_image.find_lower_border())
