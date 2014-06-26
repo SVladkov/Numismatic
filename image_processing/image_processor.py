@@ -199,7 +199,11 @@ class ImageProcessor():
 			counter += 2	
 			
 		return pixel_column_difference
-			
+		
+	'''def cut_coin(self):
+		region = self.crop()
+		region.show()'''
+		
 	def crop(self):
 		left = self.find_left_border()
 		right = self.find_right_border()
@@ -207,9 +211,43 @@ class ImageProcessor():
 		lower = self.find_lower_border()
 		
 		box = (left, upper, right, lower)
-		region = self.image.crop(box)
+		cropped = self.image.crop(box)
 			
-		return region	
+		pixels_of_cropped = cropped.load()
+		ImageProcessor.draw_circle(pixels_of_cropped, (right - left) / 2, (lower - upper) / 2, (right - left) / 2 - 1)
+		
+		cropped.show()
+		return cropped
+		
+	@staticmethod
+	def draw_circle(pixels, center_x, center_y, radius):
+		x = radius
+		y = 0
+		radius_error = 1 - x
+		
+		while x >= y:
+			pixels[center_x + x, center_y + y] = (0, 0, 0)
+			pixels[center_x + y, center_y + x] = (0, 0, 0)
+			pixels[center_x - x, center_y + y] = (0, 0, 0)
+			pixels[center_x - y, center_y + x] = (0, 0, 0)
+			pixels[center_x - x, center_y - y] = (0, 0, 0)
+			pixels[center_x - y, center_y - x] = (0, 0, 0)
+			pixels[center_x + x, center_y - y] = (0, 0, 0)
+			pixels[center_x + y, center_y - x] = (0, 0, 0)
+			
+			y += 1
+			
+			if radius_error < 0:
+				radius_error += 2 * y + 1
+			else:
+				x -= 1
+				radius_error += 2 * (y - x + 1)
+			
+			
+			
+			
+			
+			
 			
 			
 			
